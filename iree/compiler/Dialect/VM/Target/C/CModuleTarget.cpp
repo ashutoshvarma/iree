@@ -81,9 +81,8 @@ static LogicalResult printShim(IREE::VM::FuncOp &funcOp,
   auto s = callingConvention.getValue();
   output << "call_";
   if (s.size() == 0) {
-    output << "0_";
+    output << "0v_v";
   } else {
-    std::replace(s.begin(), s.end(), '.', '_');
     output << s;
   }
   output << "_shim";

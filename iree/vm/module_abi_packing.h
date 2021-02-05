@@ -219,8 +219,8 @@ struct cconv_map<std::tuple<Ts...>> {
 template <typename U>
 struct cconv_map<absl::Span<U>> {
   static constexpr const auto conv_chars = concat_literals(
-      literal("["), cconv_map<typename impl::remove_cvref<U>::type>::conv_chars,
-      literal("]"));
+      literal("C"), cconv_map<typename impl::remove_cvref<U>::type>::conv_chars,
+      literal("D"));
 };
 
 template <typename Result, typename... Params>
@@ -231,7 +231,7 @@ struct cconv_storage {
         concat_literals(
             cconv_map<
                 typename impl::remove_cvref<Params>::type>::conv_chars...),
-        literal("."),
+        literal("_"),
         concat_literals(
             cconv_map<typename impl::remove_cvref<Result>::type>::conv_chars));
     static constexpr const auto str =
@@ -247,7 +247,8 @@ struct cconv_storage_void {
         literal("0"),
         concat_literals(
             cconv_map<
-                typename impl::remove_cvref<Params>::type>::conv_chars...));
+                typename impl::remove_cvref<Params>::type>::conv_chars...),
+        literal("_v"));
     static constexpr const auto str =
         iree_string_view_t{value.data(), value.size()};
     return str;
